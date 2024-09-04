@@ -1,0 +1,140 @@
+1.CREATE PROCEDURE InsertNewDepartment(
+    IN p_dept_id INT,
+    IN p_dept_name VARCHAR(100),
+    IN p_location VARCHAR(100)
+)
+BEGIN
+    -- Insert the new department into the DEPT table
+    INSERT INTO DEPT (DEPT_ID, DEPT_NAME, LOCATION)
+    VALUES (p_dept_id, p_dept_name, p_location);
+    
+    -- You can add additional logic here, like error handling or logging
+END;
+
+
+
+2.CREATE FUNCTION GetEmployeeCountByDept(
+    p_deptid INT
+)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE employee_count INT;
+    
+    -- Count the number of employees in the specified department
+    SELECT COUNT(*) INTO employee_count
+    FROM EMPLOYEES
+    WHERE DEPT_ID = p_deptid;
+    
+    -- Return the count
+    RETURN employee_count;
+END;
+
+3.CREATE FUNCTION CalculatePercentage(
+    p_marks DECIMAL(10,2),
+    p_maxmarks DECIMAL(10,2)
+)
+RETURNS DECIMAL(5,2)
+DETERMINISTIC
+BEGIN
+    DECLARE percentage DECIMAL(5,2);
+    
+    -- Calculate the percentage
+    SET percentage = (p_marks / p_maxmarks) * 100;
+    
+    -- Return the calculated percentage
+    RETURN percentage;
+END;
+4.CREATE PROCEDURE GetEmployeeAndDepartmentDetails(
+    IN p_empid INT
+)
+BEGIN
+    -- Display employee details and associated department details
+    SELECT e.EMP_ID, e.EMP_NAME, e.SALARY, d.DEPT_ID, d.DEPT_NAME, d.LOCATION
+    FROM EMPLOYEES e
+    JOIN DEPT d ON e.DEPT_ID = d.DEPT_ID
+    WHERE e.EMP_ID = p_empid;
+END;
+5.CREATE FUNCTION GetAverageSalaryByDept(
+    p_deptid INT
+)
+RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    DECLARE avg_salary DECIMAL(10,2);
+    
+    -- Calculate the average salary for the given department
+    SELECT AVG(SALARY) INTO avg_salary
+    FROM EMPLOYEES
+    WHERE DEPT_ID = p_deptid;
+    
+    -- Return the average salary
+    RETURN avg_salary;
+END;
+6.CREATE PROCEDURE AddNewSupplier(
+    IN p_supplier_id INT,
+    IN p_supplier_name VARCHAR(100),
+    IN p_location VARCHAR(100)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Handle duplicate supplier ID exception
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Duplicate Supplier ID found';
+    END;
+    
+    -- Insert new supplier into the supplier table
+    INSERT INTO SUPPLIER (SUPPLIER_ID, SUPPLIER_NAME, LOCATION)
+    VALUES (p_supplier_id, p_supplier_name, p_location);
+END;
+7.CREATE PROCEDURE AddNewEmployee(
+    IN p_emp_id INT,
+    IN p_emp_name VARCHAR(100),
+    IN p_salary DECIMAL(10,2),
+    IN p_dept_id INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Handle any integrity constraint violation
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Integrity constraint violation';
+    END;
+    
+    -- Insert new employee into the employee table
+    INSERT INTO EMPLOYEES (EMP_ID, EMP_NAME, SALARY, DEPT_ID)
+    VALUES (p_emp_id, p_emp_name, p_salary, p_dept_id);
+END;
+8a.CREATE PROCEDURE UpdateEmployeeSalary(
+    IN p_emp_id INT,
+    IN p_amount DECIMAL(10,2)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Handle the case where the employee record does not exist
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'No such employee record found';
+    END;
+    
+    -- Update the salary of the employee
+    UPDATE EMPLOYEES
+    SET SALARY = SALARY + p_amount
+    WHERE EMP_ID = p_emp_id;
+    
+    -- Check if the employee exists
+    IF ROW_COUNT() = 0 THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'No such employee record found';
+    END IF;
+END;
+b.DECLARE v_emp_id INT;
+DECLARE v_amount DECIMAL(10,2);
+
+-- Accept employee number and amount
+SET v_emp_id = 123;  -- Example employee number
+SET v_amount = 1000; -- Example amount to increase
+
+-- Call the procedure to update the salary
+CALL UpdateEmployeeSalary(v_emp_id, v_amount);
