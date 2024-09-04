@@ -1,0 +1,61 @@
+desc department
+desc employee
+ALTER TABLE department ADD location VARCHAR(255)
+INSERT INTO department VALUES (10, 'accounts', 'tvm');
+insert into  employee values (6,'arjun',800000,10)
+select * from employee
+
+If the employee table has a foreign key constraint on Deptno that references the department table, the insertion of the employee will succeed because the department with Deptno 10 now exists in the department table after your previous insert.
+The database enforces referential integrity, meaning you cannot add an employee to a department that does not exist. Since you added the department first, the insertion of the employee is valid.
+
+INSERT INTO table1_copy SELECT * FROM table1 WHERE ROWNUM <= 3;
+INSERT INTO table2_copy SELECT * FROM table1 WHERE ROWNUM <= 3;
+INSERT INTO table3_copy SELECT * FROM table1 WHERE ROWNUM <= 3;
+INSERT INTO table4_copy SELECT * FROM table1 WHERE ROWNUM <= 3;
+INSERT INTO table5_copy SELECT * FROM table1 WHERE ROWNUM <= 3;
+INSERT INTO table6_copy SELECT * FROM table1 WHERE ROWNUM <= 3;
+INSERT INTO table7_copy SELECT * FROM table1 WHERE ROWNUM <= 3;
+INSERT INTO table8_copy SELECT * FROM table1 WHERE ROWNUM <= 3;
+
+
+DELETE FROM customer WHERE customer_id = 123;
+
+
+INSERT INTO Employee (empno, name) VALUES (109, 'rmmu');
+
+
+UPDATE customer SET address = 'New Delhi' WHERE customer_id = 123;
+
+
+DELETE FROM Employee WHERE department_id = 10 AND salary > 5000;
+
+
+UPDATE Employee SET deptno = 25, name = 'RAmmm' WHERE empno = 101;
+
+
+UPDATE Student SET email = 'NA' WHERE email IS NULL OR email = '';
+
+
+DELETE FROM Student WHERE age > 20;
+
+
+DELETE FROM Student WHERE telephone IS NULL AND email IS NULL;
+
+
+DELETE FROM Student WHERE birthday LIKE '05-06-%' OR birthday LIKE '05/06/%';
+
+
+UPDATE Student
+SET firstname = 'XXX', dob =27/08/2024
+WHERE firstname LIKE '_A%';
+
+
+delete from student where name like '%a'
+
+
+update table set
+last_name='jan'
+where dob='%-01-%'
+
+
+delete from student where name like t%
